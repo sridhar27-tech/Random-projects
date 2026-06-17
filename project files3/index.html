@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoteChain — Decentralized Voting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Noise overlay ── -->
+  <div class="noise"></div>
+
+  <!-- ── Grid background ── -->
+  <div class="grid-bg"></div>
+
+  <!-- ════════════════════ HEADER ════════════════════ -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">VoteChain</span>
+      </div>
+
+      <div class="network-badge" id="networkBadge">
+        <span class="net-dot"></span>
+        <span id="networkName">Not Connected</span>
+      </div>
+
+      <button class="connect-btn" id="connectBtn">
+        <span class="btn-icon">⬡</span>
+        Connect Wallet
+      </button>
+    </div>
+  </header>
+
+  <!-- ════════════════════ WALLET BAR ════════════════════ -->
+  <div class="wallet-bar hidden" id="walletBar">
+    <div class="wallet-bar-inner">
+      <div class="wallet-info">
+        <span class="wallet-label">CONNECTED ADDRESS</span>
+        <span class="wallet-address" id="walletAddress">—</span>
+      </div>
+      <div class="vote-status" id="voteStatusBadge">
+        <span class="status-dot"></span>
+        <span id="voteStatusText">Eligible to Vote</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ MAIN ════════════════════ -->
+  <main class="main">
+
+    <!-- ── Election Hero ── -->
+    <section class="election-hero" id="electionHero">
+      <div class="hero-left">
+        <div class="hero-eyebrow">LIVE ELECTION</div>
+        <h1 class="hero-title" id="electionTitle">Loading election...</h1>
+        <div class="hero-meta">
+          <div class="meta-item">
+            <span class="meta-label">STATUS</span>
+            <span class="meta-value status-chip" id="electionStatus">—</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">TOTAL VOTES</span>
+            <span class="meta-value" id="totalVotes">—</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">TIME REMAINING</span>
+            <span class="meta-value mono" id="timeRemaining">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="chain-visual">
+          <div class="block b1"><span>BLOCK</span><span class="hash">0x4f2a…</span></div>
+          <div class="chain-link">⬡</div>
+          <div class="block b2 active"><span>BLOCK</span><span class="hash">0x9c1b…</span></div>
+          <div class="chain-link">⬡</div>
+          <div class="block b3"><span>BLOCK</span><span class="hash">0x7d3e…</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Not Connected Prompt ── -->
+    <section class="connect-prompt" id="connectPrompt">
+      <div class="prompt-box">
+        <div class="prompt-icon">🦊</div>
+        <h2>Connect Your Wallet</h2>
+        <p>Connect MetaMask to participate in this election. Your vote is anonymous, immutable, and permanently recorded on-chain.</p>
+        <button class="connect-btn-large" id="connectBtnLarge">Connect MetaMask</button>
+        <div class="prompt-features">
+          <div class="feat"><span>🔒</span> One vote per address</div>
+          <div class="feat"><span>⛓</span> Immutable on blockchain</div>
+          <div class="feat"><span>👁</span> Fully transparent</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Candidates Grid ── -->
+    <section class="candidates-section hidden" id="candidatesSection">
+      <div class="section-header">
+        <h2 class="section-title">Candidates</h2>
+        <span class="section-sub">Select a candidate and cast your vote</span>
+      </div>
+      <div class="candidates-grid" id="candidatesGrid">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
+    <!-- ── Results Section ── -->
+    <section class="results-section hidden" id="resultsSection">
+      <div class="section-header">
+        <h2 class="section-title">Live Results</h2>
+        <span class="section-sub">Updated in real-time from the blockchain</span>
+      </div>
+      <div class="results-container" id="resultsContainer">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
+    <!-- ── Transaction Log ── -->
+    <section class="tx-section hidden" id="txSection">
+      <div class="section-header">
+        <h2 class="section-title">Transaction Log</h2>
+        <span class="section-sub">Your on-chain activity this session</span>
+      </div>
+      <div class="tx-log" id="txLog">
+        <div class="tx-empty">No transactions yet</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ════════════════════ VOTE MODAL ════════════════════ -->
+  <div class="modal-overlay hidden" id="voteModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-header">
+        <div class="modal-eyebrow">CONFIRM VOTE</div>
+        <h3 class="modal-title" id="modalCandidateName">—</h3>
+        <div class="modal-party" id="modalCandidateParty">—</div>
+      </div>
+      <div class="modal-body">
+        <p class="modal-warning">
+          ⚠ This action is <strong>irreversible</strong>. Your vote will be permanently recorded on the Ethereum blockchain.
+        </p>
+        <div class="modal-details">
+          <div class="detail-row">
+            <span>Candidate ID</span>
+            <span class="mono" id="modalCandidateId">—</span>
+          </div>
+          <div class="detail-row">
+            <span>Network</span>
+            <span class="mono" id="modalNetwork">—</span>
+          </div>
+          <div class="detail-row">
+            <span>Gas Estimate</span>
+            <span class="mono">~60,000 gwei</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="modalCancel">Cancel</button>
+        <button class="btn-confirm" id="modalConfirm">
+          <span id="confirmBtnText">Cast Vote</span>
+          <span class="btn-spinner hidden" id="confirmSpinner">⟳</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ TOAST ════════════════════ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ════════════════════ SCRIPTS ════════════════════ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.9.0/ethers.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
