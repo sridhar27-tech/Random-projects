@@ -1,0 +1,7 @@
+0000000000000000000000000000000000000000 00b82f84150f8a4455aaf3cae275808923a66660 Sridhar.M <sdhar7866@gmail.com> 1775451111 +0530	commit (initial): Initialize Papa Niko Bellic Music App
+00b82f84150f8a4455aaf3cae275808923a66660 0000000000000000000000000000000000000000 Sridhar.M <sdhar7866@gmail.com> 1775451276 +0530	Branch: renamed refs/heads/master to refs/heads/main
+0000000000000000000000000000000000000000 00b82f84150f8a4455aaf3cae275808923a66660 Sridhar.M <sdhar7866@gmail.com> 1775451276 +0530	Branch: renamed refs/heads/master to refs/heads/main
+00b82f84150f8a4455aaf3cae275808923a66660 5b06c89756f7b43e7d729dc850f7c5645b6a31b3 Sridhar.M <sdhar7866@gmail.com> 1775451293 +0530	pull origin main --rebase (start): checkout 5b06c89756f7b43e7d729dc850f7c5645b6a31b3
+5b06c89756f7b43e7d729dc850f7c5645b6a31b3 d932ac96bbf4e2853c56f2b1c222dda2cbce8f97 Sridhar.M <sdhar7866@gmail.com> 1775451293 +0530	pull origin main --rebase (pick): Initialize Papa Niko Bellic Music App
+d932ac96bbf4e2853c56f2b1c222dda2cbce8f97 d932ac96bbf4e2853c56f2b1c222dda2cbce8f97 Sridhar.M <sdhar7866@gmail.com> 1775451293 +0530	pull origin main --rebase (finish): returning to refs/heads/main
+d932ac96bbf4e2853c56f2b1c222dda2cbce8f97 dd4c9a505ae471807973b183dfa4ef9384da22a1 Sridhar.M <sdhar7866@gmail.com> 1775451488 +0530	commit: Enhance README and add deployment config
