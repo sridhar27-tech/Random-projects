@@ -1,0 +1,5 @@
+priority,category,issue,action
+HIGH,Raw Materials,Rejected batches have 76.1% avg quality vs 91.0% for accepted,Set minimum quality threshold at 85% and audit suppliers quarterly
+HIGH,Training,Operators on rejected batches have 10.1 years vs 12.3 years,Implement mentorship program pairing new operators with veterans (10+ years)
+MEDIUM,Equipment,Temperature variance too high (±10.3°C),Install automated temperature control systems with ±2°C tolerance
+HIGH,Maintenance,Machines on rejected batches receive less maintenance,Schedule preventive maintenance every 200 production hours minimum

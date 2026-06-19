@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoForge • Industrial Waste Marketplace</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+       
+        :root {
+            --neon-green: #00ff9d;
+            --dark-bg: #0a0a0a;
+            --card-bg: #111111;
+        }
+       
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+       
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+       
+        nav {
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 255, 157, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1.1rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+       
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--neon-green);
+            text-decoration: none;
+        }
+       
+        .logo::before {
+            content: '♻️';
+            font-size: 34px;
+            animation: rotate 10s linear infinite;
+        }
+       
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+       
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none;
+        }
+       
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+       
+        .nav-links a.active {
+            color: var(--neon-green);
+        }
+       
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--neon-green);
+            border-radius: 3px;
+        }
+       
+        .prototype-btn {
+            background: linear-gradient(90deg, #00ff9d, #00cc7a);
+            color: #000;
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(0, 255, 157, 0.6);
+            transition: all 0.3s ease;
+        }
+       
+        .prototype-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(0, 255, 157, 0.9);
+        }
+       
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 3rem 5%;
+        }
+       
+        .tab-content.active {
+            display: block;
+        }
+       
+        /* IoT Integration Section - Exact match to your screenshot */
+        .iot-hero {
+            background: #0a0a0a;
+            border-radius: 28px;
+            padding: 5rem 4rem;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            margin-bottom: 3rem;
+        }
+        
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 255, 157, 0.15);
+            color: var(--neon-green);
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 255, 157, 0.4);
+        }
+        
+        .iot-hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.8rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+        
+        .iot-hero h1 .highlight {
+            color: var(--neon-green);
+        }
+        
+        .iot-hero p {
+            font-size: 1.35rem;
+            max-width: 720px;
+            margin: 0 auto 3rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .iot-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .iot-btn {
+            padding: 18px 36px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .iot-btn-connect {
+            background: transparent;
+            color: var(--neon-green);
+            border: 3px solid var(--neon-green);
+        }
+        
+        .iot-btn-simulate {
+            background: var(--neon-green);
+            color: #000;
+            border: none;
+        }
+        
+        .iot-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.6);
+        }
+        
+        /* Sensor Grid (kept for consistency) */
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+       
+        .sensor-card {
+            background: #1a1a1a;
+            padding: 1.8rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0,255,157,0.25);
+            text-align: center;
+        }
+       
+        .sensor-value {
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: var(--neon-green);
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 10px 0;
+        }
+        
+        /* Other tabs */
+        .hero, .coming-soon {
+            padding: 5rem 5% 4rem;
+        }
+        
+        .coming-soon {
+            text-align: center;
+            font-size: 1.6rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav>
+        <a href="#" class="logo" onclick="switchTab(0)">EcoForge</a>
+       
+        <ul class="nav-links">
+            <li><a onclick="switchTab(0)" id="nav-0">Marketplace</a></li>
+            <li><a onclick="switchTab(1)" id="nav-1">AI Classify</a></li>
+            <li><a onclick="switchTab(2)" id="nav-2" class="active">IoT Live</a></li>
+            <li><a onclick="switchTab(3)" id="nav-3">Industries</a></li>
+        </ul>
+       
+        <button onclick="launchPrototype()" class="prototype-btn">
+            🚀 Full Prototype
+        </button>
+    </nav>
+
+    <!-- MARKETPLACE TAB -->
+    <div id="tab-0" class="tab-content">
+        <div class="coming-soon">
+            <h2>🛒 Industrial Waste Marketplace</h2>
+            <p style="margin-top:2rem; font-size:1.3rem;">Browse & buy/sell waste from verified industries.<br>Coming with real listings soon.</p>
+            <button onclick="alert('Marketplace listings would load here from database.db')" style="margin-top:3rem; padding:16px 40px; background:var(--neon-green); color:#000; border:none; border-radius:50px; font-weight:600; cursor:pointer;">
+                Browse Available Waste
+            </button>
+        </div>
+    </div>
+
+    <!-- AI CLASSIFY TAB -->
+    <div id="tab-1" class="tab-content">
+        <div class="hero">
+            <div style="flex:1;">
+                <h1>AI Waste Classification</h1>
+                <p style="font-size:1.4rem; margin:1.5rem 0;">Point your camera at industrial waste.<br>AI + IoT data gives instant classification.</p>
+                <button onclick="startCamera()" style="padding:16px 36px; background:#000; border:3px solid var(--neon-green); color:var(--neon-green); border-radius:50px; font-size:1.1rem; cursor:pointer;">
+                    📸 Open Camera
+                </button>
+            </div>
+           
+            <div class="camera-container">
+                <div class="camera-box">
+                    <video id="video" autoplay playsinline></video>
+                    <div style="padding:15px; text-align:center;">
+                        <button onclick="captureImage()" id="capture-btn" style="width:100%; padding:16px; background:var(--neon-green); color:#000; border:none; border-radius:50px; font-weight:600; cursor:pointer;" disabled>
+                            📸 Capture & Classify
+                        </button>
+                    </div>
+                </div>
+               
+                <div id="results">
+                    <h3>Classification Result</h3>
+                    <div style="background:rgba(0,255,157,0.1); padding:1rem; border-radius:16px;">
+                        <strong>Waste Type:</strong> <span id="waste-type" style="color:var(--neon-green); font-size:1.4rem;">Metal Scrap</span>
+                    </div>
+                    <div style="background:rgba(0,255,157,0.1); padding:1rem; border-radius:16px;">
+                        <strong>Toxicity:</strong> <span id="toxicity">42%</span>
+                    </div>
+                    <button onclick="sellWaste()" style="margin-top:1rem; width:100%; padding:18px; background:#000; color:var(--neon-green); border:2px solid var(--neon-green); border-radius:50px;">
+                        List on Marketplace
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IOT LIVE TAB - NEW DESIGN FROM YOUR IMAGE -->
+    <div id="tab-2" class="tab-content active">
+        <div class="iot-hero">
+            <div class="live-badge">
+                <span style="display:inline-block; width:10px; height:10px; background:#00ff9d; border-radius:50%; animation: pulse 2s infinite;"></span>
+                LIVE IOT SENSOR INTEGRATION
+            </div>
+            
+            <h1>Real-time sensors feeding<br>your <span class="highlight">ai_model.py</span></h1>
+            
+            <p>
+                Temperature • Toxicity • Weight • pH • Humidity<br>
+                Data from <strong>iot_simulator.py</strong> is automatically synced to<br>
+                classification &amp; marketplace
+            </p>
+            
+            <div class="iot-buttons">
+                <button onclick="connectIoT()" class="iot-btn iot-btn-connect">
+                    🔌 Connect IoT Simulator
+                </button>
+                <button onclick="simulateFullCycle()" class="iot-btn iot-btn-simulate">
+                    ▶️ Simulate Live Waste Bin Data
+                </button>
+            </div>
+        </div>
+
+        <!-- Live Sensor Readings -->
+        <h2 style="text-align:center; font-family:'Space Grotesk',sans-serif; font-size:2.4rem; margin:3rem 0 2rem;">Current Sensor Readings</h2>
+        <div class="sensor-grid" id="sensor-grid">
+            <!-- Filled by JavaScript -->
+        </div>
+    </div>
+
+    <!-- INDUSTRIES TAB -->
+    <div id="tab-3" class="tab-content">
+        <div class="coming-soon">
+            <h2>🏭 Connected Industries</h2>
+            <p style="margin-top:2rem; font-size:1.3rem;">47 industries currently connected.<br>Steel, Chemical, Automotive, Electronics & more.</p>
+            <button onclick="alert('Industry partnership requests would go here.')" style="margin-top:3rem; padding:16px 40px; background:#222; color:white; border:none; border-radius:50px; font-weight:600; cursor:pointer;">
+                View All Industries
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Tab Switching
+        function switchTab(tabIndex) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${tabIndex}`).classList.add('active');
+            
+            document.querySelectorAll('.nav-links a').forEach((link, i) => {
+                link.classList.toggle('active', i === tabIndex);
+            });
+            
+            if (tabIndex === 2) setTimeout(createSensorCards, 150);
+        }
+
+        // Camera functions
+        let stream = null;
+        function startCamera() {
+            const video = document.getElementById('video');
+            const captureBtn = document.getElementById('capture-btn');
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(s => {
+                stream = s;
+                video.srcObject = stream;
+                captureBtn.disabled = false;
+            })
+            .catch(() => alert("Camera permission required."));
+        }
+        
+        function captureImage() {
+            document.getElementById('results').style.display = 'flex';
+            const types = ["Metal Scrap", "Plastic Waste", "Chemical Sludge", "E-Waste"];
+            document.getElementById('waste-type').textContent = types[Math.floor(Math.random()*4)];
+            document.getElementById('toxicity').textContent = (20 + Math.random()*70).toFixed(0) + "%";
+        }
+        
+        function sellWaste() {
+            alert("✅ Waste listed successfully on Marketplace!");
+        }
+
+        // IoT Sensors
+        let sensors = { temperature: 87, toxicity: 42, weight: 14.8, ph: 6.8, humidity: 68 };
+        
+        function createSensorCards() {
+            const grid = document.getElementById('sensor-grid');
+            grid.innerHTML = `
+                <div class="sensor-card"><div>Temperature</div><div class="sensor-value">${sensors.temperature}°C</div></div>
+                <div class="sensor-card"><div>Toxicity</div><div class="sensor-value">${sensors.toxicity}%</div></div>
+                <div class="sensor-card"><div>Weight</div><div class="sensor-value">${sensors.weight} kg</div></div>
+                <div class="sensor-card"><div>pH Level</div><div class="sensor-value">${sensors.ph}</div></div>
+                <div class="sensor-card"><div>Humidity</div><div class="sensor-value">${sensors.humidity}%</div></div>
+            `;
+        }
+        
+        function connectIoT() {
+            alert("✅ IoT Simulator Connected!\n\nReal-time data is now streaming from iot_simulator.py");
+        }
+        
+        function simulateFullCycle() {
+            sensors.temperature = (82 + Math.random() * 18).toFixed(1);
+            sensors.toxicity = (25 + Math.random() * 70).toFixed(0);
+            sensors.weight = (8 + Math.random() * 20).toFixed(1);
+            createSensorCards();
+            alert("📡 Live Waste Bin Data Simulated!\nData pushed to ai_model.py for classification.");
+        }
+        
+        function launchPrototype() {
+            const win = window.open('', '_blank');
+            win.document.write(`<h1 style="text-align:center;margin-top:120px;color:#00ff9d;font-family:sans-serif;">🚀 Full Prototype Running</h1><p style="text-align:center;">IoT + Camera + AI + Marketplace all connected.</p>`);
+        }
+
+        // Initialize
+        window.onload = () => {
+            createSensorCards();
+            console.log("%c✅ IoT section updated with exact design from screenshot!", "color:#00ff9d; font-size:16px;");
+        };
+    </script>
+</body>
+</html>

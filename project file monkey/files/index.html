@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejection Analytics - Full Stack Application</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>🏭 Rejection Analytics</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-link active" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-link" data-page="batches">Batches</a>
+                <a href="#" class="nav-link" data-page="predict">Predict</a>
+                <a href="#" class="nav-link" data-page="recommendations">Recommendations</a>
+            </div>
+            <div class="nav-user">
+                <span id="username-display">Guest</span>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page active">
+            <div class="page-header">
+                <h2>📊 Dashboard Overview</h2>
+                <p>Real-time analytics and statistics</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-content">
+                        <h3 id="total-batches">0</h3>
+                        <p>Total Batches</p>
+                    </div>
+                </div>
+                <div class="stat-card rejected">
+                    <div class="stat-icon">❌</div>
+                    <div class="stat-content">
+                        <h3 id="rejected-count">0</h3>
+                        <p>Rejected Batches</p>
+                    </div>
+                </div>
+                <div class="stat-card accepted">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <h3 id="accepted-count">0</h3>
+                        <p>Accepted Batches</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-content">
+                        <h3 id="rejection-rate">0%</h3>
+                        <p>Rejection Rate</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Predictions -->
+            <div class="section">
+                <h3>🔮 Recent Predictions</h3>
+                <div class="table-container">
+                    <table id="recent-predictions-table">
+                        <thead>
+                            <tr>
+                                <th>Batch Number</th>
+                                <th>Predicted Status</th>
+                                <th>Rejection Probability</th>
+                                <th>Actual Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="5" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Shift Analysis -->
+            <div class="section">
+                <h3>🌙 Shift Analysis</h3>
+                <div id="shift-analysis-container" class="chart-container">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Batches Page -->
+        <div id="batches-page" class="page">
+            <div class="page-header">
+                <h2>📦 Manufacturing Batches</h2>
+                <button class="btn-primary" onclick="showCreateBatchModal()">+ Create New Batch</button>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <input type="text" id="batch-search" placeholder="Search batch number..." onkeyup="searchBatches()">
+                <select id="status-filter" onchange="filterBatches()">
+                    <option value="">All Status</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+                <select id="shift-filter" onchange="filterBatches()">
+                    <option value="">All Shifts</option>
+                    <option value="Morning">Morning</option>
+                    <option value="Afternoon">Afternoon</option>
+                    <option value="Night">Night</option>
+                </select>
+            </div>
+
+            <!-- Batches Table -->
+            <div class="table-container">
+                <table id="batches-table">
+                    <thead>
+                        <tr>
+                            <th>Batch #</th>
+                            <th>Temperature</th>
+                            <th>Quality</th>
+                            <th>Experience</th>
+                            <th>Shift</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="8" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Predict Page -->
+        <div id="predict-page" class="page">
+            <div class="page-header">
+                <h2>🎯 Predict Batch Rejection</h2>
+                <p>Enter batch parameters to get AI-powered prediction</p>
+            </div>
+
+            <div class="predict-container">
+                <form id="predict-form" class="predict-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Machine Temperature (°C)</label>
+                            <input type="number" name="machine_temperature" step="0.1" value="75" required>
+                            <span class="hint">Optimal: 65-85°C</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Operator Experience (years)</label>
+                            <input type="number" name="operator_experience_years" value="10" required>
+                            <span class="hint">More experience = better quality</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Production Speed (units/hr)</label>
+                            <input type="number" name="production_speed" step="0.1" value="100" required>
+                            <span class="hint">Optimal: 85-115</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Raw Material Quality (%)</label>
+                            <input type="number" name="raw_material_quality" step="0.1" value="85" required>
+                            <span class="hint">Target: >85%</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Maintenance Hours</label>
+                            <input type="number" name="maintenance_hours" step="0.1" value="5" required>
+                            <span class="hint">Recent maintenance hours</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Work Shift</label>
+                            <select name="shift" required>
+                                <option value="Morning">Morning</option>
+                                <option value="Afternoon">Afternoon</option>
+                                <option value="Night">Night</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Humidity (%)</label>
+                            <input type="number" name="humidity_percent" step="0.1" value="45" required>
+                            <span class="hint">Optimal: 40-50%</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Machine Age (years)</label>
+                            <input type="number" name="machine_age_years" value="5" required>
+                            <span class="hint">Newer machines = better quality</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Inspection Thoroughness (%)</label>
+                            <input type="number" name="inspection_thoroughness" step="0.1" value="80" required>
+                            <span class="hint">Target: >80%</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Supplier Rating (1-10)</label>
+                            <input type="number" name="supplier_rating" step="0.1" value="8" min="1" max="10" required>
+                            <span class="hint">Higher is better</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Previous Defects</label>
+                            <input type="number" name="defect_history_count" value="2" required>
+                            <span class="hint">Count of previous defects</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-large">🔮 Predict Rejection</button>
+                </form>
+
+                <!-- Prediction Result -->
+                <div id="prediction-result" class="prediction-result" style="display: none;">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations Page -->
+        <div id="recommendations-page" class="page">
+            <div class="page-header">
+                <h2>💡 Quality Improvement Recommendations</h2>
+                <button class="btn-primary" onclick="showCreateRecommendationModal()">+ Add Recommendation</button>
+            </div>
+
+            <!-- Recommendations Filters -->
+            <div class="filters">
+                <select id="rec-priority-filter" onchange="filterRecommendations()">
+                    <option value="">All Priorities</option>
+                    <option value="HIGH">High Priority</option>
+                    <option value="MEDIUM">Medium Priority</option>
+                    <option value="LOW">Low Priority</option>
+                </select>
+                <select id="rec-status-filter" onchange="filterRecommendations()">
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="implemented">Implemented</option>
+                </select>
+            </div>
+
+            <!-- Recommendations Grid -->
+            <div id="recommendations-grid" class="recommendations-grid">
+                <div class="loading">Loading recommendations...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Batch Modal -->
+    <div id="create-batch-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Batch</h3>
+                <span class="close" onclick="closeModal('create-batch-modal')">&times;</span>
+            </div>
+            <form id="create-batch-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Batch Number *</label>
+                        <input type="text" name="batch_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Machine Temperature (°C) *</label>
+                        <input type="number" name="machine_temperature" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Operator Experience (years) *</label>
+                        <input type="number" name="operator_experience_years" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Production Speed *</label>
+                        <input type="number" name="production_speed" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Raw Material Quality (%) *</label>
+                        <input type="number" name="raw_material_quality" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Maintenance Hours *</label>
+                        <input type="number" name="maintenance_hours" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Shift *</label>
+                        <select name="shift" required>
+                            <option value="Morning">Morning</option>
+                            <option value="Afternoon">Afternoon</option>
+                            <option value="Night">Night</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Humidity (%) *</label>
+                        <input type="number" name="humidity_percent" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Machine Age (years) *</label>
+                        <input type="number" name="machine_age_years" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Inspection Thoroughness (%) *</label>
+                        <input type="number" name="inspection_thoroughness" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Supplier Rating (1-10) *</label>
+                        <input type="number" name="supplier_rating" step="0.1" min="1" max="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Defect History Count *</label>
+                        <input type="number" name="defect_history_count" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Create Batch</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Login to Rejection Analytics</h3>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" value="admin" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" value="password123" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+                <p class="hint" style="margin-top: 10px;">Default: admin / password123</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+</body>
+</html>
