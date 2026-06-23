@@ -19,3 +19,6 @@ A premium Password Generator with a real-time Strength Indicator built using the
 
 ## How to Run
 Simply open `index.html` in any modern web browser.
+
+
+copyrights @sridhar27-tech
